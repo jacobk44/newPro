@@ -5,9 +5,9 @@
     "description": "Product API with Orders",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "newpro-b978.onrender.com/",
   "basePath": "/",
-  "schemes": ["http", "https"],
+  "schemes": ["https"],
   "paths": {
     "/products/": {
       "get": {

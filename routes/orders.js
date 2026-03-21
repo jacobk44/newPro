@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const ordersController = require('../controllers/orders');
-// const validation = require('../middleware/validate');
+const validation = require('../middleware/orderValidate');
 
 router.get('/', ordersController.getAll);
 
 router.get('/:id', ordersController.getSingle);
 
-router.post('/', ordersController.createProduct);
+router.post('/', validation.validateOrder, ordersController.createProduct);
 
-router.put('/:id', ordersController.updateProduct);
+router.put('/:id',validation.validateOrder, ordersController.updateProduct);
 
 router.delete('/:id', ordersController.deleteProduct);
 

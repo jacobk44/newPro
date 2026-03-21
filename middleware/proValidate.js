@@ -2,6 +2,9 @@
 const validator = require('../helpers/validate');
 
 const validateProduct = (req, res, next) => {
+  // Convert price & stackQuantity to numbers first
+  req.body.price = Number(req.body.price);
+  req.body.stackQuantity = Number(req.body.stackQuantity);
   const validationRule = {
     productName: 'required|string',
     description: 'string',

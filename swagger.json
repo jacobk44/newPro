@@ -5,7 +5,7 @@
     "description": "Product API with Orders",
     "version": "1.0.0"
   },
-  "host": "newpro-b978.onrender.com/",
+  "host": "newpro-b978.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "paths": {

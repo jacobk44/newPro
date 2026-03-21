@@ -28,8 +28,8 @@ const createProduct = async (req, res) => {
   const product = {
     productName: req.body.productName,
     description: req.body.description,
-    price: req.body.price,
-    stackQuantity: req.body.stackQuantity,
+    price: Number(req.body.price),
+    stackQuantity: Number(req.body.stackQuantity),
   };
 
   const result = await mongodb

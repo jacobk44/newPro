@@ -26,9 +26,9 @@ const getSingle = async (req, res) => {
 const createProduct = async (req, res) => {
   // swagger.tags =[contacts]
   const order = {
-    user_id: req.body.user_id,
+    user_id: Number(req.body.user_id),
     order_date: req.body.order_date,
-    total_amount: req.body.total_amount,
+    total_amount: Number(req.body.total_amount),
     status: req.body.status,
   };
 
@@ -57,9 +57,9 @@ const updateProduct = async (req, res) => {
     const orderId = new ObjectId(req.params.id);
 
     const order = {
-      user_id: req.body.user_id,
+      user_id: Number(req.body.user_id),
       order_date: req.body.order_date,
-      total_amount: req.body.total_amount,
+      total_amount: Number(req.body.total_amount),
       status: req.body.status,
     };
 

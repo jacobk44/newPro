@@ -6,7 +6,7 @@ const validateProduct = (req, res, next) => {
     productName: 'required|string',
     description: 'string',
     price: 'required|numeric|min:0',
-    stackQuantity: 'required|integer|min:0'
+    stackQuantity: 'required|numeric|min:0'
   };
 
   validator(req.body, validationRule, {}, (err, status) => {

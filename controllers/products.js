@@ -2,50 +2,92 @@ const { response } = require("express");
 const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
+
 const getAll = async (req, res) => {
-  const result = await mongodb.getDatabase().db().collection("products").find();
-  result.toArray().then((users) => {
-    res.setHeader("Content-Type", "application/json");
+  try {
+    const result = await mongodb
+      .getDatabase()
+      .db()
+      .collection('products')
+      .find();
+
+    const users = await result.toArray();
+
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).json(users);
-  });
-};
+  } catch (error) {
+    console.error(error);
 
-const getSingle = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection("products")
-    .find({ _id: userId });
-  result.toArray().then((users) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(users[0]);
-  });
-};
-
-const createProduct = async (req, res) => {
-  // swagger.tags =[contacts]
-  const product = {
-    productName: req.body.productName,
-    description: req.body.description,
-    price: req.body.price,
-    stackQuantity: req.body.stackQuantity,
-  };
-
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection("products")
-    .insertOne(product);
-
-  if (result.acknowledged) {
-    res.status(201).json(result);
-  } else {
     res.status(500).json({
-      error: "Some error occurred while creating the contact",
+      message: 'Error retrieving contacts',
+      error: error.message,
     });
   }
 };
+
+
+
+const getSingle = async (req, res) => {
+  try {
+    const userId = new ObjectId(req.params.id);
+
+    const order = await mongodb
+      .getDatabase()
+      .db()
+      .collection("products")
+      .findOne({ _id: userId });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(product);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error retrieving order",
+      error: error.message,
+    });
+  }
+};
+
+  
+
+const createProduct = async (req, res) => {
+  // swagger.tags =[contacts]
+  try {
+    const product = {
+      user_id: req.body.user_id,
+      order_date: req.body.order_date,
+      total_amount: req.body.total_amount,
+      status: req.body.status,
+    };
+
+    const result = await mongodb
+      .getDatabase()
+      .db()
+      .collection("products")
+      .insertOne(product);
+
+    if (result.acknowledged) {
+      res.status(201).json(result);
+    } else {
+      res.status(500).json({
+        error: "Some error occurred while creating the contact",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "An error occurred while creating the contact",
+    });
+  }
+};
+
+
+
 
 const updateProduct = async (req, res) => {
   // swagger.tags =[contacts]
@@ -79,6 +121,8 @@ const updateProduct = async (req, res) => {
   }
 };
 
+
+
 const deleteProduct = async (req, res) => {
   // swagger.tags =[contacts]
   try {
@@ -99,6 +143,8 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 module.exports = {
   getAll,

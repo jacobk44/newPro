@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const dotenv = require('dotenv').config()
+require('dotenv').config()
 
 const mongodb = require("./data/database.js");
 const app = express();
@@ -26,21 +26,21 @@ app
   .use(passport.session())
   // allow passport to use 'express-session' 
   .use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Z-Key",
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTION",
-  );
-  next();
-})
-.use(cors({method: ['GET', 'POST', 'PUT', 'DELETE','PATCH',]}))
-.use(cors({origin: "*"}))
-// Routes AFTER middleware
-.use("/", require("./routes/index.js"));
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Z-Key",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTION",
+    );
+    next();
+  })
+  .use(cors({ method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH',] }))
+  .use(cors({ origin: "*" }))
+  // Routes AFTER middleware
+  .use("/", require("./routes/index.js"));
 
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
@@ -48,23 +48,24 @@ passport.use(new GitHubStrategy({
   callbackURL: process.env.CALLBACK_URL
 
 },
-function(accessToken, refreshToken, profile, done){
-  return done(null, profile)
-}
+  function (accessToken, refreshToken, profile, done) {
+    return done(null, profile)
+  }
 ))
 
-passport.serializeUser((user, done) =>{
+passport.serializeUser((user, done) => {
   done(null, user);
 })
 
-passport.deserializeUser((user, done) =>{
+passport.deserializeUser((user, done) => {
   done(null, user);
 })
 
-app.get('/', (req,res) =>{res.send(req.session.user !== undefined ? `Logend is as ${req.session.user.displayName}`: "Logged Out")});
-app.get('/github/callback', passport.authenticate('github',{
-  failureRedirect: '/api-docs', session: false}),
-  (req,res) =>{
+app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `Logend is as ${req.session.user.displayName}` : "Logged Out") });
+app.get('/github/callback', passport.authenticate('github', {
+  failureRedirect: '/api-docs', session: false
+}),
+  (req, res) => {
     req.session.user = req.user;
     res.redirect('/');
   });

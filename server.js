@@ -17,7 +17,7 @@ app
   .use(session({
     secret: "secret",
     resave: false,
-    saveinitialized: true,
+    saveUninitialized: true,
   }))
   // This is the basic express sessions ({..}) initialization.
   .use(passport.initialize())

@@ -3,15 +3,17 @@ const router = express.Router();
 
 const productsController = require('../controllers/products');
 const validation = require('../middleware/proValidate');
+const {isAuthenticated} = require('../middleware/authenticate')
+
 
 router.get('/', productsController.getAll);
 
 router.get('/:id', productsController.getSingle);
 
-router.post('/',validation.validateProduct, productsController.createProduct);
+router.post('/',isAuthenticated, validation.validateProduct, productsController.createProduct);
 
-router.put('/:id',validation.validateProduct, productsController.updateProduct);
+router.put('/:id',isAuthenticated, validation.validateProduct, productsController.updateProduct);
 
-router.delete('/:id', productsController.deleteProduct);
+router.delete('/:id', isAuthenticated, productsController.deleteProduct);
 
 module.exports = router;

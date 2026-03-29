@@ -1,44 +1,41 @@
-const { response } = require("express");
 const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
-
+// Get all products
 const getAll = async (req, res) => {
   try {
     const result = await mongodb
       .getDatabase()
       .db()
-      .collection('products')
+      .collection("products")
       .find();
 
-    const users = await result.toArray();
+    const products = await result.toArray();
 
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(users);
+    res.status(200).json(products);
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
-      message: 'Error retrieving contacts',
+      message: "Error retrieving products",
       error: error.message,
     });
   }
 };
 
-
+// Get a single product
 
 const getSingle = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
 
-    const order = await mongodb
+    const product = await mongodb
       .getDatabase()
       .db()
       .collection("products")
       .findOne({ _id: userId });
 
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+    if (!product) {
+      return res.status(404).json({ message: "products not found" });
     }
 
     res.setHeader("Content-Type", "application/json");
@@ -52,17 +49,16 @@ const getSingle = async (req, res) => {
     });
   }
 };
-
   
 
+// Create a new product
 const createProduct = async (req, res) => {
-  // swagger.tags =[contacts]
   try {
     const product = {
-      user_id: req.body.user_id,
-      order_date: req.body.order_date,
-      total_amount: req.body.total_amount,
-      status: req.body.status,
+      productName: req.body.productName,
+      description: req.body.description,
+      price: req.body.price,
+      stockQuantity: req.body.stockQuantity,
     };
 
     const result = await mongodb
@@ -74,59 +70,59 @@ const createProduct = async (req, res) => {
     if (result.acknowledged) {
       res.status(201).json(result);
     } else {
-      res.status(500).json({
-        error: "Some error occurred while creating the contact",
-      });
+      res.status(500).json({ error: "Error creating product" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      error: "An error occurred while creating the contact",
-    });
+    res.status(500).json({ error: error.message });
   }
 };
 
-
-
-
+// Update a product
 const updateProduct = async (req, res) => {
-  // swagger.tags =[contacts]
   try {
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ error: "Invalid product ID" });
+    const id = req.params.id;
+
+    if (!id || !ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
     }
 
-    const productId = new ObjectId(req.params.id);
+    const productId = new ObjectId(id);
 
-    const product = {
+    const updatedProduct = {
       productName: req.body.productName,
       description: req.body.description,
       price: req.body.price,
-      stackQuantity: req.body.stackQuantity,
+      stockQuantity: req.body.stockQuantity,
     };
 
     const result = await mongodb
       .getDatabase()
       .db()
       .collection("products")
-      .replaceOne({ _id: productId }, product);
+      .replaceOne({ _id: productId }, updatedProduct);
 
     if (result.modifiedCount > 0) {
       res.status(204).send();
     } else {
-      res.status(500).json({ error: "Product not updated" });
+      res.status(404).json({ message: "Product not updated or not found" });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
 
-
-
+// Delete a product
 const deleteProduct = async (req, res) => {
-  // swagger.tags =[contacts]
   try {
-    const productId = new ObjectId(req.params.id);
+    const id = req.params.id;
+
+    if (!id || !ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const productId = new ObjectId(id);
 
     const result = await mongodb
       .getDatabase()
@@ -135,16 +131,15 @@ const deleteProduct = async (req, res) => {
       .deleteOne({ _id: productId });
 
     if (result.deletedCount > 0) {
-      res.status(204).send(); // Successfully deleted
+      res.status(204).send();
     } else {
-      res.status(404).json({ error: "Product not found" });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 module.exports = {
   getAll,

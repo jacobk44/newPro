@@ -54,7 +54,7 @@ const getSingle = async (req, res) => {
   
 
 
-const createProduct = async (req, res) => {
+const createOrder = async (req, res) => {
   // swagger.tags =[contacts]
   try {
     const order = {
@@ -87,7 +87,7 @@ const createProduct = async (req, res) => {
 
 
 
-const updateProduct = async (req, res) => {
+const updateOrder = async (req, res) => {
   // swagger.tags =[contacts]
   try {
     if (!ObjectId.isValid(req.params.id)) {
@@ -121,7 +121,7 @@ const updateProduct = async (req, res) => {
 
 
 
-const deleteProduct = async (req, res) => {
+const deleteOrder= async (req, res) => {
   // swagger.tags =[contacts]
   try {
     const orderId = new ObjectId(req.params.id);
@@ -145,7 +145,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   getAll,
   getSingle,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+  createOrder,
+  updateOrder,
+  deleteOrder,
 };

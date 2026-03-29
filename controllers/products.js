@@ -24,7 +24,7 @@ const getAll = async (req, res) => {
 
 // Get a single product
 
-const getSingle = async (req, res) => {
+const getSingleProduct = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
 
@@ -44,7 +44,7 @@ const getSingle = async (req, res) => {
     console.error(error);
 
     res.status(500).json({
-      message: "Error retrieving order",
+      message: "Error retrieving products",
       error: error.message,
     });
   }
@@ -143,7 +143,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAll,
-  getSingle,
+  getSingleProduct,
   createProduct,
   updateProduct,
   deleteProduct,

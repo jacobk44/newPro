@@ -8,7 +8,7 @@ const {isAuthenticated} = require('../middleware/authenticate')
 
 router.get('/', productsController.getAll);
 
-router.get('/:id', productsController.getSingle);
+router.get('/:id', productsController.getSingleProduct);
 
 router.post('/',isAuthenticated, validation.validateProduct, productsController.createProduct);
 

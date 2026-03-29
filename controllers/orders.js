@@ -26,7 +26,7 @@ const getAll = async (req, res) => {
 
 
 
-const getSingle = async (req, res) => {
+const getSingleOrder = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.id);
 
@@ -144,7 +144,7 @@ const deleteOrder= async (req, res) => {
 
 module.exports = {
   getAll,
-  getSingle,
+  getSingleOrder,
   createOrder,
   updateOrder,
   deleteOrder,

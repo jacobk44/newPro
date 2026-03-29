@@ -2,7 +2,7 @@ const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
 // Get all products
-const getAll = async (req, res) => {
+const getAllProduct = async (req, res) => {
   try {
     const result = await mongodb
       .getDatabase()
@@ -49,7 +49,7 @@ const getSingleProduct = async (req, res) => {
     });
   }
 };
-  
+
 
 // Create a new product
 const createProduct = async (req, res) => {
@@ -142,7 +142,7 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
-  getAll,
+  getAllProduct,
   getSingleProduct,
   createProduct,
   updateProduct,

@@ -16,8 +16,8 @@ app
   .use(bodyParser.json())
   .use(session({
     secret: "secret",
-    resave: "flase",
-    saveinitialized: false,
+    resave: false,
+    saveinitialized: true,
   }))
   // This is the basic express sessions ({..}) initialization.
   .use(passport.initialize())
